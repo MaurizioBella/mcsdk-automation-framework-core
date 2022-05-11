@@ -259,6 +259,112 @@
         "operationId": "deleteCampaignById"
       }
     },
+    "/sms/v1/queueMO": {
+      "post": {
+        "tags": [
+          "SMS"
+        ],
+        "summary": "postQueueMO",
+        "description": "Fires the entry event that initiates the journey.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "JSON Parameters",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/QueueMOEvent"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "A single definition for an email",
+            "schema": {
+              "$ref": "#/definitions/ResponseQueueMO"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          },
+          "403": {
+            "description": "Permission error",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        },
+        "operationId": "postQueueMO"
+      }
+    },
+    "/interaction/v1/events": {
+      "post": {
+        "tags": [
+          "Interaction"
+        ],
+        "summary": "fireTheEvent",
+        "description": "Fires the entry event that initiates the journey.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "JSON Parameters",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "A single definition for an email",
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          },
+          "403": {
+            "description": "Permission error",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "schema": {
+              "$ref": "#/definitions/ApiError"
+            }
+          }
+        },
+        "operationId": "fireTheEvent"
+      }
+    },
     "/messaging/v1/email/definitions/": {
       "post": {
         "tags": [
@@ -1389,6 +1495,104 @@
     }
   },
   "definitions": {
+    "QueueMOEvent": {
+      "type": "object",
+      "required": [
+        "Data",
+        "shortCode",
+        "messageText"
+      ],
+      "properties": {
+        "messageText": {
+          "description": "Keyword",
+          "type": "string"
+        },
+        "shortCode": {
+          "description": "Short Code.",
+          "type": "string"
+        },
+        "Data": {
+          "description": "Array of recipient objects that contain parameters and metadata for the recipients, such as send tracking and personalization attributes. Use this parameter to send to multiple recipients in one request. Use either the recipient or recipients parameter, but not both.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MODataDefinitionContent"
+          }
+        }
+      }
+    },
+    "MODataDefinitionContent": {
+      "type": "string",
+      "required": [
+        "mobile"
+      ],
+      "properties": {
+        "mobile": {
+          "description": "contact mobile",
+          "type": "string"
+        }
+      }
+    },
+    "ResponseQueueMO": {
+      "type": "object",
+      "required": [
+        "identifier",
+        "mobileNumber",
+        "result"
+      ],
+      "properties": {
+        "identifier": {
+          "description": "Id of response",
+          "type": "string"
+        },
+        "mobileNumber": {
+          "description": "Contact Number",
+          "type": "string"
+        },
+        "result": {
+          "description": "result",
+          "type": "string"
+        }
+      }
+    },
+
+    "Event": {
+      "type": "object",
+      "required": [
+        "ContactKey",
+        "EventDefinitionKey",
+        "Data"
+      ],
+      "properties": {
+        "EventDefinitionKey": {
+          "description": "Find the EventDefinitionKey in Event Administration after the event is created and saved. The EventDefinitionKey is present for both standard and custom events. Don’t include a period in the EventDefinitionKey.",
+          "type": "string"
+        },
+        "ContactKey": {
+          "description": "The ID that uniquely identifies a subscriber or a contact.",
+          "type": "string"
+        },
+        "Data": {
+          "$ref": "#/definitions/DataDefinitionContent"
+        }
+      }
+    },
+    "DataDefinitionContent": {
+      "type": "object",
+      "required": [
+        "ContactKey",
+        "status"
+      ],
+      "properties": {
+        "ContactKey": {
+          "description": "The ID that uniquely identifies a subscriber or a contact",
+          "type": "string"
+        },
+        "status": {
+          "description": "The status of the event",
+          "type": "string"
+        }
+      }
+    },
     "ApiError": {
       "type": "object",
       "properties": {
