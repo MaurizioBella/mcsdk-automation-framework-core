@@ -278,7 +278,7 @@
           }
         ],
         "responses": {
-          "201": {
+          "202": {
             "description": "A single definition for an email",
             "schema": {
               "$ref": "#/definitions/ResponseQueueMO"
@@ -1498,7 +1498,7 @@
     "QueueMOEvent": {
       "type": "object",
       "required": [
-        "Data",
+        "mobileNumbers",
         "shortCode",
         "messageText"
       ],
@@ -1511,7 +1511,7 @@
           "description": "Short Code.",
           "type": "string"
         },
-        "Data": {
+        "mobileNumbers": {
           "description": "Array of recipient objects that contain parameters and metadata for the recipients, such as send tracking and personalization attributes. Use this parameter to send to multiple recipients in one request. Use either the recipient or recipients parameter, but not both.",
           "type": "array",
           "items": {
